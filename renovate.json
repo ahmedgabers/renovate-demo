@@ -1,15 +1,30 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices", "config:recommended"],
-  "enabledManagers": ["dockerfile", "helmv3"],
+  "enabledManagers": ["dockerfile", "helmv3", "regex"],
   "branchPrefix": "renovate/",
+  "regexManagers": [
+    {
+      "fileMatch": ["^Chart\\.yaml$"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?) registryUrl=(?<registryUrl>.*?)\\nversion: (?<currentValue>.*)\\n[\\s\\S]*?dependencies:[\\s\\S]*?- name: \\k<depName>\\n    version: (?<currentValue>.*?)\\n"
+      ],
+      "datasourceTemplate": "helm",
+      "registryUrlTemplate": "{{{registryUrl}}}"
+    }
+  ],
   "packageRules": [
+    {
+      "matchManagers": ["regex"],
+      "matchPackageNames": ["cert-manager"],
+      "groupName": "cert-manager-sync",
+      "groupSlug": "cert-manager-sync",
+      "commitMessageTopic": "cert-manager chart and dependency versions"
+    },
     {
       "matchManagers": ["helmv3"],
       "matchPackageNames": ["cert-manager"],
-      "groupName": "cert-manager",
-      "groupSlug": "cert-manager",
-      "commitMessageTopic": "cert-manager chart and dependency"
+      "enabled": false
     },
     {
       "matchManagers": ["helmv3"],
