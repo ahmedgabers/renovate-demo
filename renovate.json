@@ -1,12 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:best-practices", "config:recommended"],
-  "enabledManagers": ["dockerfile", "helmv3", "regex"],
+  "extends": [
+    "config:best-practices",
+    "config:recommended"
+  ],
+  "enabledManagers": [
+    "dockerfile",
+    "helmv3",
+    "custom.regex"
+  ],
   "branchPrefix": "renovate/",
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["(^|/)Chart\\.ya?ml$"],
+      "managerFilePatterns": [
+        "/(^|/)Chart\\.ya?ml$/"
+      ],
       "matchStrings": [
         "(?m)^#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>[^\\s]+)\\s+registryUrl=(?<registryUrl>\\S+)\\s*\\nversion:\\s*['\"]?(?<currentValue>v?\\d+\\.\\d+\\.\\d+(?:[-+][^\\s'\\\"]+)?)['\"]?\\s*$"
       ],
@@ -17,22 +26,38 @@
   ],
   "packageRules": [
     {
-      "matchManagers": ["helmv3", "regex"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": [
+        "helmv3",
+        "custom.regex"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "helm non-major updates",
       "groupSlug": "helm-non-major"
     },
     {
-      "matchManagers": ["helmv3", "regex"],
-      "matchUpdateTypes": ["major"],
+      "matchManagers": [
+        "helmv3",
+        "custom.regex"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "groupName": "helm major updates",
       "groupSlug": "helm-major"
     }
   ],
   "prCreation": "immediate",
-  "schedule": ["at any time"],
+  "schedule": [
+    "at any time"
+  ],
   "rangeStrategy": "bump",
-  "labels": ["dependencies", "helmv3"],
+  "labels": [
+    "dependencies",
+    "helmv3"
+  ],
   "commitMessagePrefix": "chore(deps):",
   "commitMessageAction": "update",
   "commitMessageTopic": "{{depName}}",
