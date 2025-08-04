@@ -3,40 +3,28 @@
   "extends": ["config:best-practices", "config:recommended"],
   "enabledManagers": ["dockerfile", "helmv3", "regex"],
   "branchPrefix": "renovate/",
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["^Chart\\.yaml$"],
+      "customType": "regex",
+      "fileMatch": ["(^|/)Chart\\.ya?ml$"],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?) registryUrl=(?<registryUrl>.*?)\\nversion: (?<currentValue>.*)\\n[\\s\\S]*?dependencies:[\\s\\S]*?- name: \\k<depName>\\n    version: (?<currentValue>.*?)\\n"
+        "(?m)^#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>[^\\s]+)\\s+registryUrl=(?<registryUrl>\\S+)\\s*\\nversion:\\s*['\"]?(?<currentValue>v?\\d+\\.\\d+\\.\\d+(?:[-+][^\\s'\\\"]+)?)['\"]?\\s*$"
       ],
-      "datasourceTemplate": "helm",
-      "registryUrlTemplate": "{{{registryUrl}}}"
+      "datasourceTemplate": "{{datasource}}",
+      "depNameTemplate": "{{depName}}",
+      "registryUrlTemplate": "{{registryUrl}}"
     }
   ],
   "packageRules": [
     {
-      "matchManagers": ["regex"],
-      "matchPackageNames": ["cert-manager"],
-      "groupName": "cert-manager-sync",
-      "groupSlug": "cert-manager-sync",
-      "commitMessageTopic": "cert-manager chart and dependency versions"
-    },
-    {
-      "matchManagers": ["helmv3"],
-      "matchPackageNames": ["cert-manager"],
-      "enabled": false
-    },
-    {
-      "matchManagers": ["helmv3"],
+      "matchManagers": ["helmv3", "regex"],
       "matchUpdateTypes": ["minor", "patch"],
-      "excludePackageNames": ["cert-manager"],
       "groupName": "helm non-major updates",
       "groupSlug": "helm-non-major"
     },
     {
-      "matchManagers": ["helmv3"],
+      "matchManagers": ["helmv3", "regex"],
       "matchUpdateTypes": ["major"],
-      "excludePackageNames": ["cert-manager"],
       "groupName": "helm major updates",
       "groupSlug": "helm-major"
     }
@@ -47,6 +35,7 @@
   "labels": ["dependencies", "helmv3"],
   "commitMessagePrefix": "chore(deps):",
   "commitMessageAction": "update",
+  "commitMessageTopic": "{{depName}}",
   "commitMessageExtra": "from {{currentVersion}} to {{newVersion}}",
   "prBody": "This PR updates the Helm chart {{depName}} from version {{currentVersion}} to {{newVersion}}."
 }
