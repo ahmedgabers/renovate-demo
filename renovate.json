@@ -6,19 +6,24 @@
   "packageRules": [
     {
       "matchManagers": ["helmv3"],
+      "matchPackageNames": ["cert-manager"],
+      "groupName": "cert-manager",
+      "groupSlug": "cert-manager",
+      "commitMessageTopic": "cert-manager chart and dependency"
+    },
+    {
+      "matchManagers": ["helmv3"],
       "matchUpdateTypes": ["minor", "patch"],
+      "excludePackageNames": ["cert-manager"],
       "groupName": "helm non-major updates",
       "groupSlug": "helm-non-major"
     },
     {
       "matchManagers": ["helmv3"],
       "matchUpdateTypes": ["major"],
+      "excludePackageNames": ["cert-manager"],
       "groupName": "helm major updates",
       "groupSlug": "helm-major"
-    },
-    {
-      "matchManagers": ["helmv3"],
-      "bumpVersion": "patch"
     }
   ],
   "prCreation": "immediate",
@@ -27,7 +32,6 @@
   "labels": ["dependencies", "helmv3"],
   "commitMessagePrefix": "chore(deps):",
   "commitMessageAction": "update",
-  "commitMessageTopic": "{{depName}}",
   "commitMessageExtra": "from {{currentVersion}} to {{newVersion}}",
   "prBody": "This PR updates the Helm chart {{depName}} from version {{currentVersion}} to {{newVersion}}."
 }
