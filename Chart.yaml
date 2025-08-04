@@ -1,8 +1,11 @@
 apiVersion: v2
-name: wrapper-cert-manager
-description: "Wrapper chart for cert-manager (test)"
-version: "v1.0.0"        # try with/without the leading v if you want
+name: cert-manager
+description: "Wrapper chart for installing cert-manager"
+version: v1.15.5
+maintainers:
+  - name: Cloud Engineering, Bhagya Kandage
+    email: bhagya.kandage@ifs.com
 dependencies:
   - name: cert-manager
-    version: "v1.17.0"   # deliberately old so Renovate finds an update
+    version: v1.15.5
     repository: https://charts.jetstack.io
