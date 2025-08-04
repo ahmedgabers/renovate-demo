@@ -18,15 +18,7 @@
     },
     {
       "matchManagers": ["helmv3"],
-      "bumpVersions": [
-        {
-          "filePatterns": ["{{packageFileDir}}/Chart.{yaml,yml}"],
-          "matchStrings": [
-            "(?m)^version:\\s*['\"]?v?(?<version>\\d+\\.\\d+\\.\\d+(?:[-+][^\\s'\\\"]+)?)['\"]?\\s*$"
-          ],
-          "bumpType": "patch"
-        }
-      ]
+      "bumpVersion": "patch"
     }
   ],
   "prCreation": "immediate",
